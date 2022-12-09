@@ -1,63 +1,82 @@
-  // initialise game counter
-  let playerScore = 0;
-  let computerScore = 0;
+const rockButton = document.getElementById('rock');
+const paperButton = document.getElementById('paper');
+const scissorsButton = document.getElementById('scissors');
 
-  const game = () => {
-    // computer ranoom choice function
-    const computerPlay = () => {
-      let computerChoices = ["rock", "paper", "scissors"];
-      let choice =
-        computerChoices[Math.floor(Math.random() * computerChoices.length)];
-      return choice;
-    };
+const YOUWINMESSAGE = "You win!";
+const YOULOSEMESSAGE = "You lose.";
+let playerScore = 0;
+let computerScore = 0;
+let playerSelection;
 
-    // playRound function compares inputs and returns string with winner
-    const playRound = (playerSelection, computerSelection) => {
-      if (playerSelection.toLowerCase() === computerSelection) {
-        return "Tie!";
-      }
-      if (
-        (playerSelection.toLowerCase() === "rock" &&
-          computerSelection === "scissors") ||
-        (playerSelection.toLowerCase() === "paper" &&
-          computerSelection === "rock") ||
-        (playerSelection.toLowerCase() === "scissors" &&
-          computerSelection === "paper")
-      )
-        playerScore++;
-      {
-        console.log(
-          `You win! ${playerSelection} beats ${computerSelection}! Your score is:  ${playerScore}  Computer score is:  ${computerScore}`
-        );
-      }
-      if (
-        (computerSelection === "rock" &&
-          playerSelection.toLowerCase() === "scissors") ||
-        (computerSelection === "paper" &&
-          playerSelection.toLowerCase() === "rock") ||
-        (computerSelection === "scissors" &&
-          playerSelection.toLowerCase() === "paper")
-      ) {
-        computerScore++;
-        console.log(
-          `You Lose! ${computerSelection} beats ${playerSelection}! Your score is:  ${playerScore}  Computer score is:  ${computerScore}`
-        );
-      }
-    };
-    // Game rounds logic
-    for (let i = 0; i < 5; i++) {
-      let playerSelection = prompt(
-        "Choose rock, paper, or scissors"
-      ).toLowerCase();
-      playRound(playerSelection, computerPlay());
+const h1 = document.querySelector('h1');
+let whoWon = document.createElement('h2');
+let mainScore = document.createElement('h3');
+const resetButton = document.createElement('button');
+resetButton.textContent = "Play again!"
+
+function computerPlay() {
+    const RPSArray = ['rock', 'paper', 'scissors']
+    // Selects a random value of the array
+    const randomSelection = RPSArray[Math.floor(Math.random() * RPSArray.length)];
+        return randomSelection;
     }
-    if (playerScore > computerScore) {
-      console.log(`You beat the computer ${playerScore} out of 5 rounds!`);
-    } else {
-      console.log(
-        `Skynet has defeated you ${computerScore} out of 5 rounds, Your final score was: ${playerScore} to Computer's score of ${computerScore}!`
-      );
-    }
-  };
 
-  game();
+function playRound(playerSelection, computerSelection) {
+    computerSelection = computerPlay();
+    playerSelection = playerSelection;
+    let result;
+        if (playerScore < 5 && computerScore < 5) {
+            if (playerSelection === computerSelection) {
+                result = "It's a tie. Try again!";
+            } else if ( (playerSelection === "paper" && computerSelection === "rock")
+            ||
+            (playerSelection === "rock" && computerSelection === "scissors")
+            || 
+            (playerSelection === "scissors" && computerSelection === "paper") ) {
+                result = YOUWINMESSAGE + " " + playerSelection + " beats " + computerSelection;
+                playerScore++;
+            } else {
+                result = YOULOSEMESSAGE + " " + computerSelection + " beats " + playerSelection;
+                computerScore++;
+            }
+        whoWon.textContent = result;
+        mainScore.textContent = `Your points: ${playerScore}, Computer points: ${computerScore}`;   
+        return result;
+    } if (playerScore === 5) {
+        mainScore.textContent = `Your points: ${playerScore}, Computer points: ${computerScore}`;
+        whoWon.textContent = "You have beaten Skynet! Congrats";
+        h1.appendChild(resetButton);
+    } if (computerScore === 5) {
+        mainScore.textContent = `Your points: ${playerScore}, Computer points: ${computerScore}`;
+        whoWon.textContent = "You got beaten by the robot! Try again!";
+        h1.appendChild(resetButton);
+    }
+}
+
+rockButton.addEventListener('click', (e) => {
+    console.log(playRound(e.target.id, computerPlay));
+})
+
+paperButton.addEventListener('click', (e) => {
+    console.log(playRound(e.target.id, computerPlay));
+})
+
+scissorsButton.addEventListener('click', (e) => {
+    console.log(playRound(e.target.id, computerPlay));
+})
+
+resetButton.addEventListener('click', () => {
+    resetGame();
+})
+
+function resetGame() {
+    playerScore = 0;
+    computerScore = 0;
+    mainScore.textContent = `Your points: ${playerScore}, Computer points: ${computerScore}`;
+    h1.removeChild(resetButton);
+}
+
+h1.appendChild(whoWon);
+whoWon.textContent = "Let's play!"
+h1.appendChild(mainScore);
+mainScore.textContent = `Your points: ${playerScore}, Computer points: ${computerScore}`;
