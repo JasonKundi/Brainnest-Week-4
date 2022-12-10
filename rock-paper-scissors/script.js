@@ -14,14 +14,14 @@ let mainScore = document.createElement('h3');
 const resetButton = document.createElement('button');
 resetButton.textContent = "Play again!"
 
-function computerPlay() {
+const computerPlay = () => {
     const RPSArray = ['rock', 'paper', 'scissors']
     // Selects a random value of the array
     const randomSelection = RPSArray[Math.floor(Math.random() * RPSArray.length)];
         return randomSelection;
     }
 
-function playRound(playerSelection, computerSelection) {
+const playRound = (playerSelection, computerSelection) => {
     computerSelection = computerPlay();
     playerSelection = playerSelection;
     let result;
@@ -69,7 +69,7 @@ resetButton.addEventListener('click', () => {
     resetGame();
 })
 
-function resetGame() {
+const resetGame = () => {
     playerScore = 0;
     computerScore = 0;
     mainScore.textContent = `Your points: ${playerScore}, Computer points: ${computerScore}`;
